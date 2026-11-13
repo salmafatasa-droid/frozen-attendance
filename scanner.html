@@ -354,59 +354,64 @@
       }
     }
 
-    async function submitAttendance(qrValue) {
-      resultBox.style.display = "block";
-      resultText.textContent = "QR terbaca. Memproses absensi...";
+    
+async function submitAttendance(qrValue) {
+  resultBox.style.display = "block";
+  resultText.textContent = "QR terbaca. Memproses absensi...";
 
-      setStatus("Mengirim data pemindaian...");
+  setStatus("Mengirim data pemindaian...");
 
-      if (!API_URL) {
-        resultText.textContent =
-          "QR berhasil dibaca: " + qrValue +
-          ". Backend belum dihubungkan.";
+  if (!API_URL) {
+    resultText.textContent =
+      "QR berhasil dibaca: " + qrValue +
+      ". Backend belum dihubungkan.";
 
-        setStatus("Pemindaian berhasil, tetapi URL backend belum diisi.");
-        processing = false;
-        return;
-      }
+    setStatus("URL backend belum diisi.");
+    processing = false;
+    return;
+  }
 
-      try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify({
-            action: "scan",
-            qr: qrValue
-          })
-        });
-
-        const data = await response.json();
-
-        if (data.ok) {
-          resultText.textContent =
-            data.message || "Absensi berhasil diproses.";
-
-          setStatus("Pemindaian selesai.");
-        } else {
-          resultText.textContent =
-            data.error || data.message || "Absensi gagal diproses.";
-
-          setStatus("QR terbaca, tetapi absensi belum berhasil.");
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify({
+        action: "scan",
+        data: {
+          token: qrValue,
+          recordedBy: "ADMIN"
         }
+      })
+    });
 
-      } catch (error) {
-        resultText.textContent =
-          "Tidak dapat menghubungi server. Periksa koneksi dan konfigurasi backend.";
+    const result = await response.json();
 
-        setStatus("Terjadi kesalahan saat mengirim data.");
-        console.error(error);
+    if (result.ok) {
+      resultText.textContent =
+        result.message || "Absensi berhasil diproses.";
 
-      } finally {
-        processing = false;
-      }
+      setStatus("Pemindaian selesai.");
+
+    } else {
+      resultText.textContent =
+        result.message || "Absensi gagal diproses.";
+
+      setStatus("QR terbaca, tetapi absensi belum berhasil.");
     }
+
+  } catch (error) {
+    resultText.textContent =
+      "Tidak dapat menghubungi server. Periksa koneksi dan URL backend.";
+
+    setStatus("Terjadi kesalahan saat mengirim data.");
+    console.error(error);
+
+  } finally {
+    processing = false;
+  }
+}
 
     function stopScanner() {
       active = false;
