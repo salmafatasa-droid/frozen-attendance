@@ -169,13 +169,14 @@ async function apiRequest(action, data = {}) {
     headers: {
       "Content-Type": "text/plain;charset=utf-8"
     },
-    body: JSON.stringify({
-      action,
-      data: {
-        ...data,
-        user: APP.user?.username || ""
-      }
-    })
+   body: JSON.stringify({
+  action,
+  data: {
+    ...data,
+    sessionToken: APP.token || "",
+    user: APP.user?.username || ""
+  }
+})
   });
 
   if (!response.ok) {
@@ -225,7 +226,11 @@ async function handleLogin(event) {
 
     APP.token = result.data?.token || "";
 
-    showApplication();
+if (!APP.token) {
+  throw new Error("Login berhasil diterima, tetapi token sesi tidak ditemukan. Periksa respons login Code.gs.");
+}
+
+showApplication();
     await loadAllData();
 
     showToast("Login berhasil. Selamat datang!");
@@ -279,9 +284,9 @@ function logout() {
 function showPage(pageName) {
   APP.currentPage = pageName;
 
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.remove("active");
-  });
+  document.querySelectorAll(".page-section").forEach(page => {
+  page.classList.remove("active");
+});
 
   const target = $("page-" + pageName);
   if (target) target.classList.add("active");
@@ -998,6 +1003,9 @@ function setupEvents() {
   $("manualAttendanceButton")?.addEventListener("click", () => openModal("manualAttendance"));
 
   $("addScheduleButton")?.addEventListener("click", () => openModal("schedule"));
+   $("addStudentButton")?.addEventListener("click", () => openModal("student"));
+$("addTeacherButton")?.addEventListener("click", () => openModal("teacher"));
+$("addClassButton")?.addEventListener("click", () => openModal("class"));
   $("generateReportButton")?.addEventListener("click", generateReport);
 
   setupNavigation();
