@@ -294,155 +294,132 @@
           </button>
         </div>
 
-        <div id="studentList" class="data-list">
-          <div class="empty-state">Data siswa belum dimuat.</div>
-        </div>
+        <div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>NISN</th>
+        <th>Nama Siswa</th>
+        <th>Kelas</th>
+        <th>Jenis Kelamin</th>
+        <th>QR</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="studentList">
+      <tr><td colspan="6" class="empty-state">Data siswa belum dimuat.</td></tr>
+    </tbody>
+  </table>
+</div>
 
       </section>
 
 
-      <!-- DATA GURU -->
-      <section class="page-section" id="page-teachers">
-
-        <div class="page-title">
-          <p class="eyebrow">MASTER DATA</p>
-          <h1>Data Guru</h1>
-          <p class="muted">Kelola informasi guru dan QR Code guru.</p>
-        </div>
-
-        <div class="toolbar">
-          <input
-            type="search"
-            id="teacherSearch"
-            placeholder="Cari nama atau NIP guru..."
-          >
-
-          <button class="btn-primary" id="addTeacherButton">
-            + Tambah Guru
-          </button>
-        </div>
-
-        <div id="teacherList" class="data-list">
-          <div class="empty-state">Data guru belum dimuat.</div>
-        </div>
+      <!-- teacherList -->
+      <div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>NIP</th>
+        <th>Nama Guru</th>
+        <th>Jabatan</th>
+        <th>QR</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="teacherList">
+      <tr><td colspan="5" class="empty-state">Data guru belum dimuat.</td></tr>
+    </tbody>
+  </table>
+</div>
 
       </section>
 
 
-      <!-- DATA KELAS -->
-      <section class="page-section" id="page-classes">
+      <!-- classlist -->
+      <div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>ID Kelas</th>
+        <th>Nama Kelas</th>
+        <th>Wali Kelas</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="classList">
+      <tr><td colspan="4" class="empty-state">Data kelas belum dimuat.</td></tr>
+    </tbody>
+  </table>
+</div>
+      </section>
 
-        <div class="page-title">
-          <p class="eyebrow">MASTER DATA</p>
-          <h1>Data Kelas</h1>
-          <p class="muted">Kelola kelas dan wali kelas.</p>
-        </div>
 
-        <div class="toolbar">
-          <input
-            type="search"
-            id="classSearch"
-            placeholder="Cari nama kelas..."
-          >
-
-          <button class="btn-primary" id="addClassButton">
-            + Tambah Kelas
-          </button>
-        </div>
-
-        <div id="classList" class="data-list">
-          <div class="empty-state">Data kelas belum dimuat.</div>
-        </div>
+      <!-- attendanceList -->
+      <div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Waktu</th>
+        <th>Nama</th>
+        <th>NISN</th>
+        <th>Kelas</th>
+        <th>Status</th>
+        <th>Keterangan</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceList">
+      <tr><td colspan="8" class="empty-state">Data absensi belum dimuat.</td></tr>
+    </tbody>
+  </table>
+</div>
 
       </section>
 
 
-      <!-- ABSENSI -->
-      <section class="page-section" id="page-attendance">
-
-        <div class="page-title">
-          <p class="eyebrow">REKAP KEHADIRAN</p>
-          <h1>Data Absensi</h1>
-          <p class="muted">Lihat dan kelola catatan kehadiran siswa.</p>
-        </div>
-
-        <div class="filter-card">
-          <label for="attendanceDate">Pilih Tanggal</label>
-          <input type="date" id="attendanceDate">
-
-          <label for="attendanceStatus">Status Kehadiran</label>
-          <select id="attendanceStatus">
-            <option value="">Semua Status</option>
-            <option value="HADIR">HADIR</option>
-            <option value="IZIN">IZIN</option>
-            <option value="SAKIT">SAKIT</option>
-            <option value="ALFA">ALFA</option>
-          </select>
-
-          <button class="btn-primary" id="filterAttendanceButton">
-            Tampilkan
-          </button>
-
-          <button class="btn-secondary" id="manualAttendanceButton">
-            + Absensi Manual
-          </button>
-        </div>
-
-        <div id="attendanceList" class="data-list">
-          <div class="empty-state">Data absensi belum dimuat.</div>
-        </div>
+      <!-- scheduleList -->
+      <div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Hari</th>
+        <th>Kelas</th>
+        <th>Mata Pelajaran</th>
+        <th>Guru</th>
+        <th>Jam Masuk</th>
+        <th>Jam Pulang</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody id="scheduleList">
+      <tr><td colspan="7" class="empty-state">Jadwal belum dimuat.</td></tr>
+    </tbody>
+  </table>
+</div>
 
       </section>
 
 
-      <!-- JADWAL -->
-      <section class="page-section" id="page-schedules">
-
-        <div class="page-title">
-          <p class="eyebrow">PENGATURAN WAKTU</p>
-          <h1>Jadwal Absensi</h1>
-          <p class="muted">Atur jam masuk dan jam pulang sekolah.</p>
-        </div>
-
-        <div class="toolbar">
-          <button class="btn-primary" id="addScheduleButton">
-            + Tambah Jadwal
-          </button>
-        </div>
-
-        <div id="scheduleList" class="data-list">
-          <div class="empty-state">Jadwal belum dimuat.</div>
-        </div>
-
-      </section>
-
-
-      <!-- LAPORAN -->
-      <section class="page-section" id="page-reports">
-
-        <div class="page-title">
-          <p class="eyebrow">LAPORAN KEHADIRAN</p>
-          <h1>Laporan Absensi</h1>
-          <p class="muted">Buat rekap berdasarkan rentang tanggal.</p>
-        </div>
-
-        <div class="filter-card">
-          <label for="reportStart">Tanggal Awal</label>
-          <input type="date" id="reportStart">
-
-          <label for="reportEnd">Tanggal Akhir</label>
-          <input type="date" id="reportEnd">
-
-          <button class="btn-primary" id="generateReportButton">
-            Buat Laporan
-          </button>
-        </div>
-
-        <div id="reportSummary" class="report-summary"></div>
-
-        <div id="reportList" class="data-list">
-          <div class="empty-state">Pilih rentang tanggal untuk membuat laporan.</div>
-        </div>
+      <!-- reportList -->
+      <div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>NISN</th>
+        <th>Nama</th>
+        <th>Kelas</th>
+        <th>Status</th>
+        <th>Keterangan</th>
+      </tr>
+    </thead>
+    <tbody id="reportList">
+      <tr><td colspan="6" class="empty-state">Pilih rentang tanggal untuk membuat laporan.</td></tr>
+    </tbody>
+  </table>
+</div>
 
       </section>
 
