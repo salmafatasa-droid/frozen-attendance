@@ -252,12 +252,12 @@ a {
 
 /* PAGE VISIBILITY */
 
-.page {
+.page-section {
   display: none;
   animation: pageEnter .3s ease;
 }
 
-.page.active {
+.page-section.active {
   display: block;
 }
 
