@@ -3,80 +3,64 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07182b">
-  <title>Frozen Attendance - QR Scanner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frozen Attendance Scanner</title>
 
-  <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
+  <script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
+      margin: 0;
       min-height: 100vh;
       padding: 22px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-family: Arial, sans-serif;
       color: #eaf6ff;
       background:
-        radial-gradient(circle at top, #173d60, transparent 55%),
-        linear-gradient(145deg, #030914, #07182b 65%, #102c48);
+        radial-gradient(circle at top, #183d60, transparent 55%),
+        linear-gradient(145deg, #030914, #07182b);
     }
 
-    .container {
+    .scanner-card {
       width: 100%;
-      max-width: 440px;
-      margin: auto;
+      max-width: 460px;
+      padding: 22px;
+      border: 1px solid #315d80;
+      border-radius: 24px;
+      background: rgba(8, 26, 46, .96);
+      box-shadow: 0 18px 55px #0008;
     }
 
     .header {
       text-align: center;
-      margin: 18px 0 25px;
+      margin-bottom: 20px;
     }
 
-    .logo {
-      width: 65px;
-      height: 65px;
-      margin: auto auto 14px;
-      display: grid;
-      place-items: center;
-      border-radius: 20px;
-      font-size: 32px;
-      color: #dff5ff;
-      background: linear-gradient(145deg, #4d9bc9, #173b61);
-      box-shadow: 0 0 25px #5abaff55;
-    }
-
-    h1 {
+    .header h1 {
+      margin: 0;
+      color: #bceaff;
       font-size: 25px;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
     }
 
-    .subtitle {
-      margin-top: 8px;
-      color: #a8c9e5;
+    .header p {
+      color: #9bbbd3;
       font-size: 13px;
     }
 
-    .scanner-card {
-      padding: 17px;
-      border: 1px solid #7eb9e355;
-      border-radius: 22px;
-      background: #102943cc;
-      box-shadow: 0 15px 40px #0005;
-    }
-
-    .camera-frame {
-      position: relative;
+    .camera-box {
       overflow: hidden;
-      width: 100%;
-      aspect-ratio: 1;
-      border-radius: 17px;
-      background: #020914;
-      border: 1px solid #78c8ff66;
+      border: 2px solid #70cfff;
+      border-radius: 18px;
+      background: #000;
+      aspect-ratio: 4 / 5;
+      position: relative;
     }
 
     video {
@@ -85,341 +69,248 @@
       object-fit: cover;
     }
 
-    .camera-placeholder {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      color: #9fc5e4;
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-    }
-
-    .camera-placeholder span {
-      font-size: 45px;
-    }
-
     .scan-line {
-      display: none;
       position: absolute;
-      left: 8%;
-      right: 8%;
+      left: 10%;
+      right: 10%;
       top: 50%;
       height: 2px;
-      background: #b9eaff;
-      box-shadow: 0 0 12px #75caff;
-      animation: scanning 2s infinite ease-in-out;
-    }
-
-    @keyframes scanning {
-      0%, 100% { transform: translateY(-75px); }
-      50% { transform: translateY(75px); }
+      background: #8de1ff;
+      box-shadow: 0 0 12px #8de1ff;
+      pointer-events: none;
     }
 
     .status {
       margin: 16px 0;
+      min-height: 42px;
       padding: 12px;
       border-radius: 12px;
       text-align: center;
       font-size: 13px;
-      color: #c6e7ff;
-      background: #1a3c5b;
       line-height: 1.5;
+      color: #c9eaff;
+      background: #102c46;
     }
 
     .buttons {
       display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
     button {
+      width: 100%;
+      padding: 14px;
       border: 0;
       border-radius: 12px;
-      padding: 14px 10px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
     }
 
+    #startButton {
+      color: #06213a;
+      background: linear-gradient(135deg, #bceaff, #62c9ff);
+    }
+
+    #nextButton {
+      color: #dff5ff;
+      background: #234967;
+      display: none;
+    }
+
+    #closeButton {
+      color: #d5e9f8;
+      background: #172c40;
+    }
+
     button:disabled {
-      opacity: .45;
+      opacity: .5;
       cursor: not-allowed;
     }
 
-    .start {
-      color: #06203a;
-      background: linear-gradient(135deg, #d9f4ff, #78c8f4);
-    }
-
-    .stop {
-      color: #eaf6ff;
-      background: #294967;
-      border: 1px solid #83bde155;
-    }
-
-    .result {
-      display: none;
-      margin-top: 17px;
-      padding: 15px;
-      border: 1px solid #75b9e355;
-      border-radius: 14px;
-      background: #0a2036;
-      overflow-wrap: anywhere;
-    }
-
-    .result h3 {
-      margin-bottom: 9px;
-      font-size: 15px;
-    }
-
-    .result p {
-      color: #b8d7ee;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .back {
-      display: block;
-      margin: 20px auto 0;
-      color: #b9dcf5;
+    .footer {
+      margin-top: 18px;
       text-align: center;
-      text-decoration: none;
-      font-size: 13px;
-    }
-
-    .note {
-      margin-top: 20px;
-      text-align: center;
-      color: #789ab7;
+      color: #789ab5;
       font-size: 11px;
-      line-height: 1.6;
     }
   </style>
 </head>
 
 <body>
-  <main class="container">
-
+  <main class="scanner-card">
     <header class="header">
-      <div class="logo">❄</div>
       <h1>FROZEN SCANNER</h1>
-      <p class="subtitle">Sistem Presensi Digital SMAN 2 Payakumbuh</p>
+      <p>QR Attendance System</p>
     </header>
 
-    <section class="scanner-card">
+    <div class="camera-box">
+      <video id="video" autoplay muted playsinline></video>
+      <div class="scan-line"></div>
+    </div>
 
-      <div class="camera-frame">
-        <video id="video" muted playsinline></video>
+    <div class="status" id="status">
+      Tekan tombol MULAI KAMERA untuk memulai pemindaian.
+    </div>
 
-        <div class="camera-placeholder" id="placeholder">
-          <span>📷</span>
-          <p>Kamera belum diaktifkan.<br>Tekan tombol Mulai Scanner.</p>
-        </div>
+    <div class="buttons">
+      <button id="startButton" type="button">
+        MULAI KAMERA
+      </button>
 
-        <div class="scan-line" id="scanLine"></div>
-      </div>
+      <button id="nextButton" type="button">
+        SCAN BERIKUTNYA
+      </button>
 
-      <div class="status" id="status">
-        Scanner siap digunakan.
-      </div>
+      <button id="closeButton" type="button">
+        TUTUP SCANNER
+      </button>
+    </div>
 
-      <div class="buttons">
-        <button class="start" id="startButton">
-          MULAI SCANNER
-        </button>
-
-        <button class="stop" id="stopButton" disabled>
-          HENTIKAN
-        </button>
-      </div>
-
-      <div class="result" id="result">
-        <h3>Hasil Pemindaian</h3>
-        <p id="resultText"></p>
-      </div>
-
-    </section>
-
-    <a class="back" href="index.html">
-      ← Kembali ke Halaman Utama
-    </a>
-
-    <p class="note">
-      FROZEN ATTENDANCE SYSTEM<br>
-      SMAN 2 PAYAKUMBUH
-    </p>
-
+    <div class="footer">
+      SMAN 2 PAYAKUMBUH · FROZEN ATTENDANCE
+    </div>
   </main>
 
   <script>
-    /*
-      URL BACKEND AKAN DIISI SETELAH
-      GOOGLE APPS SCRIPT SELESAI DI-DEPLOY.
-    */
-    const API_URL = "";
+    const video = document.getElementById('video');
+    const statusBox = document.getElementById('status');
+    const startButton = document.getElementById('startButton');
+    const nextButton = document.getElementById('nextButton');
+    const closeButton = document.getElementById('closeButton');
 
-    const video = document.getElementById("video");
-    const statusBox = document.getElementById("status");
-    const placeholder = document.getElementById("placeholder");
-    const scanLine = document.getElementById("scanLine");
-    const resultBox = document.getElementById("result");
-    const resultText = document.getElementById("resultText");
-    const startButton = document.getElementById("startButton");
-    const stopButton = document.getElementById("stopButton");
-
-    let scanner = null;
-    let active = false;
-    let processing = false;
-    let lastQr = "";
-    let lastScanTime = 0;
+    let reader = null;
+    let controls = null;
+    let scanning = false;
+    let sending = false;
 
     function setStatus(message) {
       statusBox.textContent = message;
     }
 
-    async function startScanner() {
-      if (!window.ZXingBrowser) {
-        setStatus("Library scanner gagal dimuat. Periksa koneksi internet.");
-        return;
-      }
+    function stopCamera() {
+      scanning = false;
 
-      if (!navigator.mediaDevices ||
-          !navigator.mediaDevices.getUserMedia) {
-        setStatus("Browser tidak mendukung kamera atau halaman belum menggunakan HTTPS.");
-        return;
-      }
-
-      try {
-        scanner = new ZXingBrowser.BrowserMultiFormatReader();
-
-        active = true;
-        processing = false;
-
-        startButton.disabled = true;
-        stopButton.disabled = false;
-
-        placeholder.style.display = "none";
-        scanLine.style.display = "block";
-        resultBox.style.display = "none";
-
-        setStatus("Meminta izin kamera...");
-
-        await scanner.decodeFromConstraints(
-          {
-            audio: false,
-            video: {
-              facingMode: { ideal: "environment" }
-            }
-          },
-          video,
-          async (result, error) => {
-            if (!active || !result || processing) return;
-
-            const qrValue = result.getText();
-            const now = Date.now();
-
-            if (
-              qrValue === lastQr &&
-              now - lastScanTime < 3000
-            ) return;
-
-            lastQr = qrValue;
-            lastScanTime = now;
-            processing = true;
-
-            await submitAttendance(qrValue);
-          }
-        );
-
-        setStatus("Kamera aktif. Arahkan kamera ke QR Code siswa.");
-
-      } catch (error) {
-        active = false;
-        startButton.disabled = false;
-        stopButton.disabled = true;
-
-        placeholder.style.display = "flex";
-        scanLine.style.display = "none";
-
-        setStatus(
-          "Kamera gagal dibuka. Periksa izin kamera browser dan pastikan kamera tidak sedang digunakan aplikasi lain."
-        );
-
-        console.error(error);
-      }
-    }
-
-    
-async function submitAttendance(qrValue) {
-  resultBox.style.display = "block";
-  resultText.textContent = "QR berhasil dibaca. Mengirim ke aplikasi utama...";
-
-  setStatus("Mengirim hasil pemindaian...");
-
-  try {
-    if (!window.opener || window.opener.closed) {
-      resultText.textContent =
-        "Halaman utama tidak ditemukan. Buka scanner melalui aplikasi Frozen Attendance.";
-
-      setStatus("Hubungan dengan halaman utama terputus.");
-      return;
-    }
-
-    window.opener.postMessage(
-      {
-        type: "FROZEN_QR_RESULT",
-        qr: qrValue
-      },
-      window.location.origin
-    );
-
-    resultText.textContent =
-      "QR berhasil dikirim ke aplikasi utama. Periksa hasil absensi pada halaman utama.";
-
-    setStatus("QR berhasil dikirim.");
-  } catch (error) {
-    resultText.textContent = "Gagal mengirim hasil QR ke halaman utama.";
-    setStatus("Terjadi kesalahan.");
-    console.error(error);
-  } finally {
-    processing = false;
-  }
-}
-
-
-    function stopScanner() {
-      active = false;
-      processing = false;
-
-      if (scanner) {
-        scanner.reset();
-        scanner = null;
+      if (controls) {
+        try {
+          controls.stop();
+        } catch (error) {}
+        controls = null;
       }
 
       if (video.srcObject) {
         video.srcObject.getTracks().forEach(track => track.stop());
         video.srcObject = null;
       }
-
-      placeholder.style.display = "flex";
-      scanLine.style.display = "none";
-
-      startButton.disabled = false;
-      stopButton.disabled = true;
-
-      setStatus("Scanner dihentikan.");
     }
 
-    startButton.addEventListener("click", startScanner);
-    stopButton.addEventListener("click", stopScanner);
+    async function startCamera() {
+      if (scanning) return;
 
-    window.addEventListener("beforeunload", stopScanner);
+      if (!window.opener || window.opener.closed) {
+        setStatus(
+          'Website utama tidak ditemukan. Buka scanner melalui tombol scanner di website Apps Script.'
+        );
+        return;
+      }
+
+      if (!window.ZXing || !ZXing.BrowserMultiFormatReader) {
+        setStatus(
+          'Library scanner belum berhasil dimuat. Periksa koneksi internet lalu muat ulang halaman.'
+        );
+        return;
+      }
+
+      try {
+        sending = false;
+        scanning = true;
+
+        startButton.disabled = true;
+        nextButton.style.display = 'none';
+
+        setStatus('Meminta izin kamera...');
+
+        reader = new ZXing.BrowserMultiFormatReader();
+
+        controls = await reader.decodeFromConstraints(
+          {
+            video: {
+              facingMode: { ideal: 'environment' }
+            },
+            audio: false
+          },
+          video,
+          (result, error) => {
+            if (!scanning || sending || !result) return;
+
+            const qrValue = result.getText();
+
+            if (!qrValue) return;
+
+            sending = true;
+            scanning = false;
+
+            stopCamera();
+
+            setStatus('QR berhasil dibaca. Mengirim hasil ke website utama...');
+
+            try {
+              window.opener.postMessage(
+                {
+                  type: 'FROZEN_QR_RESULT',
+                  qr: qrValue
+                },
+                '*'
+              );
+
+              setStatus(
+                'QR berhasil dikirim. Periksa hasil absensi di website utama.'
+              );
+
+              nextButton.style.display = 'block';
+            } catch (sendError) {
+              setStatus('Gagal mengirim hasil QR ke website utama.');
+              nextButton.style.display = 'block';
+            }
+          }
+        );
+
+        setStatus('Kamera aktif. Arahkan kamera ke QR Code siswa.');
+      } catch (error) {
+        scanning = false;
+        stopCamera();
+
+        let message = 'Kamera tidak dapat dibuka.';
+
+        if (error.name === 'NotAllowedError') {
+          message = 'Izin kamera ditolak. Izinkan akses kamera pada browser.';
+        } else if (error.name === 'NotFoundError') {
+          message = 'Kamera tidak ditemukan pada perangkat ini.';
+        } else if (error.name === 'NotReadableError') {
+          message = 'Kamera sedang digunakan aplikasi lain.';
+        }
+
+        setStatus(message);
+      } finally {
+        startButton.disabled = false;
+      }
+    }
+
+    startButton.addEventListener('click', startCamera);
+
+    nextButton.addEventListener('click', () => {
+      sending = false;
+      startCamera();
+    });
+
+    closeButton.addEventListener('click', () => {
+      stopCamera();
+      window.close();
+
+      setStatus('Kamera dihentikan. Kamu dapat menutup tab ini.');
+    });
+
+    window.addEventListener('beforeunload', stopCamera);
   </script>
-
 </body>
 </html>
