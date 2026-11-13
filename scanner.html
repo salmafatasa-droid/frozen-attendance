@@ -357,19 +357,39 @@
     
 async function submitAttendance(qrValue) {
   resultBox.style.display = "block";
-  resultText.textContent = "QR terbaca. Memproses absensi...";
+  resultText.textContent = "QR berhasil dibaca. Mengirim ke aplikasi utama...";
 
-  setStatus("Mengirim data pemindaian...");
+  setStatus("Mengirim hasil pemindaian...");
 
-  if (!API_URL) {
+  try {
+    if (!window.opener || window.opener.closed) {
+      resultText.textContent =
+        "Halaman utama tidak ditemukan. Buka scanner melalui aplikasi Frozen Attendance.";
+
+      setStatus("Hubungan dengan halaman utama terputus.");
+      return;
+    }
+
+    window.opener.postMessage(
+      {
+        type: "FROZEN_QR_RESULT",
+        qr: qrValue
+      },
+      window.location.origin
+    );
+
     resultText.textContent =
-      "QR berhasil dibaca: " + qrValue +
-      ". Backend belum dihubungkan.";
+      "QR berhasil dikirim ke aplikasi utama. Periksa hasil absensi pada halaman utama.";
 
-    setStatus("URL backend belum diisi.");
+    setStatus("QR berhasil dikirim.");
+  } catch (error) {
+    resultText.textContent = "Gagal mengirim hasil QR ke halaman utama.";
+    setStatus("Terjadi kesalahan.");
+    console.error(error);
+  } finally {
     processing = false;
-    return;
   }
+}
 
   try {
     const response = await fetch(API_URL, {
