@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07182b">
+  <meta name="description" content="Frozen Attendance - Sistem Presensi QR SMAN 2 Payakumbuh">
+  <title>Frozen Attendance | SMAN 2 Payakumbuh</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="snow-layer" id="snowLayer"></div>
+
+  <!-- LOGIN -->
+  <section id="loginPage" class="login-page">
+    <div class="login-card">
+
+      <div class="logo-ice">❄</div>
+
+      <p class="school-label">SMAN 2 PAYAKUMBUH</p>
+      <h1>FROZEN<br>ATTENDANCE</h1>
+      <p class="login-description">
+        Sistem Presensi Digital Berbasis QR Code
+      </p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Masukkan username"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Masukkan password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button type="submit" class="btn-primary" id="loginButton">
+          MASUK APLIKASI
+        </button>
+
+        <p id="loginMessage" class="message"></p>
+      </form>
+
+      <div class="login-footer">
+        <span>❄</span> Frozen Attendance System
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- APLIKASI UTAMA -->
+  <section id="appPage" class="app-page hidden">
+
+    <!-- HEADER -->
+    <header class="top-header">
+      <div class="brand">
+        <div class="brand-icon">❄</div>
+        <div>
+          <h2>FROZEN ATTENDANCE</h2>
+          <p>SMAN 2 PAYAKUMBUH</p>
+        </div>
+      </div>
+
+      <div class="profile-area">
+        <div class="profile-info">
+          <strong id="profileName">Administrator</strong>
+          <small id="profileRole">ADMIN</small>
+        </div>
+        <button class="logout-button" id="logoutButton" title="Keluar">
+          ↪
+        </button>
+      </div>
+    </header>
+
+
+    <!-- CONTENT -->
+    <main class="main-content">
+
+      <!-- DASHBOARD -->
+      <section class="page-section active" id="page-dashboard">
+
+        <div class="welcome-section">
+          <div>
+            <p class="eyebrow">SELAMAT DATANG</p>
+            <h1>Dashboard Presensi</h1>
+            <p class="muted">
+              Pantau aktivitas kehadiran siswa secara langsung.
+            </p>
+          </div>
+
+          <div class="date-card">
+            <span>📅</span>
+            <strong id="currentDate">-</strong>
+            <small id="currentClock">-</small>
+          </div>
+        </div>
+
+
+        <div class="stats-grid">
+
+          <article class="stat-card">
+            <div class="stat-icon">👨‍🎓</div>
+            <div>
+              <p>Total Siswa</p>
+              <h2 id="totalStudents">0</h2>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon">👩‍🏫</div>
+            <div>
+              <p>Total Guru</p>
+              <h2 id="totalTeachers">0</h2>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon">🏫</div>
+            <div>
+              <p>Total Kelas</p>
+              <h2 id="totalClasses">0</h2>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div>
+              <p>Absensi Hari Ini</p>
+              <h2 id="totalAttendance">0</h2>
+            </div>
+          </article>
+
+        </div>
+
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RINGKASAN HARIAN</p>
+            <h2>Status Kehadiran</h2>
+          </div>
+        </div>
+
+        <div class="attendance-summary">
+
+          <div class="summary-item">
+            <span class="status-dot hadir"></span>
+            <div>
+              <small>HADIR</small>
+              <strong id="countHadir">0</strong>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <span class="status-dot izin"></span>
+            <div>
+              <small>IZIN</small>
+              <strong id="countIzin">0</strong>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <span class="status-dot sakit"></span>
+            <div>
+              <small>SAKIT</small>
+              <strong id="countSakit">0</strong>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <span class="status-dot alfa"></span>
+            <div>
+              <small>ALFA</small>
+              <strong id="countAlfa">0</strong>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="quick-actions">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">AKSES CEPAT</p>
+              <h2>Menu Utama</h2>
+            </div>
+          </div>
+
+          <div class="quick-grid">
+            <button class="quick-card" data-page="scan">
+              <span>📷</span>
+              <strong>Scan QR</strong>
+              <small>Pindai kartu siswa</small>
+            </button>
+
+            <button class="quick-card" data-page="students">
+              <span>👨‍🎓</span>
+              <strong>Data Siswa</strong>
+              <small>Kelola siswa</small>
+            </button>
+
+            <button class="quick-card" data-page="attendance">
+              <span>📋</span>
+              <strong>Absensi</strong>
+              <small>Riwayat kehadiran</small>
+            </button>
+
+            <button class="quick-card" data-page="reports">
+              <span>📊</span>
+              <strong>Laporan</strong>
+              <small>Rekap presensi</small>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- SCAN QR -->
+      <section class="page-section" id="page-scan">
+
+        <div class="page-title">
+          <p class="eyebrow">PEMINDAIAN KARTU</p>
+          <h1>Scan QR Siswa</h1>
+          <p class="muted">
+            Gunakan kamera untuk membaca QR Code milik siswa.
+          </p>
+        </div>
+
+        <div class="scanner-card">
+
+          <div class="scanner-icon">❄</div>
+
+          <h2>QR Scanner</h2>
+          <p>
+            Kamera akan dibuka melalui halaman scanner GitHub.
+          </p>
+
+          <button class="btn-primary" id="openScannerButton">
+            📷 BUKA KAMERA
+          </button>
+
+          <div id="scanResult" class="scan-result">
+            Belum ada QR Code yang dipindai.
+          </div>
+
+        </div>
+
+        <div class="info-card">
+          <strong>Informasi Pemindaian</strong>
+          <p>
+            Pastikan QR Code yang dipindai merupakan QR Code siswa
+            yang terdaftar pada database.
+          </p>
+        </div>
+
+      </section>
+
+
+      <!-- DATA SISWA -->
+      <section class="page-section" id="page-students">
+
+        <div class="page-title">
+          <p class="eyebrow">MASTER DATA</p>
+          <h1>Data Siswa</h1>
+          <p class="muted">Kelola identitas dan QR Code siswa.</p>
+        </div>
+
+        <div class="toolbar">
+          <input
+            type="search"
+            id="studentSearch"
+            placeholder="Cari nama atau NIS siswa..."
+          >
+
+          <button class="btn-primary" id="addStudentButton">
+            + Tambah Siswa
+          </button>
+        </div>
+
+        <div id="studentList" class="data-list">
+          <div class="empty-state">Data siswa belum dimuat.</div>
+        </div>
+
+      </section>
+
+
+      <!-- DATA GURU -->
+      <section class="page-section" id="page-teachers">
+
+        <div class="page-title">
+          <p class="eyebrow">MASTER DATA</p>
+          <h1>Data Guru</h1>
+          <p class="muted">Kelola informasi guru dan QR Code guru.</p>
+        </div>
+
+        <div class="toolbar">
+          <input
+            type="search"
+            id="teacherSearch"
+            placeholder="Cari nama atau NIP guru..."
+          >
+
+          <button class="btn-primary" id="addTeacherButton">
+            + Tambah Guru
+          </button>
+        </div>
+
+        <div id="teacherList" class="data-list">
+          <div class="empty-state">Data guru belum dimuat.</div>
+        </div>
+
+      </section>
+
+
+      <!-- DATA KELAS -->
+      <section class="page-section" id="page-classes">
+
+        <div class="page-title">
+          <p class="eyebrow">MASTER DATA</p>
+          <h1>Data Kelas</h1>
+          <p class="muted">Kelola kelas dan wali kelas.</p>
+        </div>
+
+        <div class="toolbar">
+          <input
+            type="search"
+            id="classSearch"
+            placeholder="Cari nama kelas..."
+          >
+
+          <button class="btn-primary" id="addClassButton">
+            + Tambah Kelas
+          </button>
+        </div>
+
+        <div id="classList" class="data-list">
+          <div class="empty-state">Data kelas belum dimuat.</div>
+        </div>
+
+      </section>
+
+
+      <!-- ABSENSI -->
+      <section class="page-section" id="page-attendance">
+
+        <div class="page-title">
+          <p class="eyebrow">REKAP KEHADIRAN</p>
+          <h1>Data Absensi</h1>
+          <p class="muted">Lihat dan kelola catatan kehadiran siswa.</p>
+        </div>
+
+        <div class="filter-card">
+          <label for="attendanceDate">Pilih Tanggal</label>
+          <input type="date" id="attendanceDate">
+
+          <label for="attendanceStatus">Status Kehadiran</label>
+          <select id="attendanceStatus">
+            <option value="">Semua Status</option>
+            <option value="HADIR">HADIR</option>
+            <option value="IZIN">IZIN</option>
+            <option value="SAKIT">SAKIT</option>
+            <option value="ALFA">ALFA</option>
+          </select>
+
+          <button class="btn-primary" id="filterAttendanceButton">
+            Tampilkan
+          </button>
+
+          <button class="btn-secondary" id="manualAttendanceButton">
+            + Absensi Manual
+          </button>
+        </div>
+
+        <div id="attendanceList" class="data-list">
+          <div class="empty-state">Data absensi belum dimuat.</div>
+        </div>
+
+      </section>
+
+
+      <!-- JADWAL -->
+      <section class="page-section" id="page-schedules">
+
+        <div class="page-title">
+          <p class="eyebrow">PENGATURAN WAKTU</p>
+          <h1>Jadwal Absensi</h1>
+          <p class="muted">Atur jam masuk dan jam pulang sekolah.</p>
+        </div>
+
+        <div class="toolbar">
+          <button class="btn-primary" id="addScheduleButton">
+            + Tambah Jadwal
+          </button>
+        </div>
+
+        <div id="scheduleList" class="data-list">
+          <div class="empty-state">Jadwal belum dimuat.</div>
+        </div>
+
+      </section>
+
+
+      <!-- LAPORAN -->
+      <section class="page-section" id="page-reports">
+
+        <div class="page-title">
+          <p class="eyebrow">LAPORAN KEHADIRAN</p>
+          <h1>Laporan Absensi</h1>
+          <p class="muted">Buat rekap berdasarkan rentang tanggal.</p>
+        </div>
+
+        <div class="filter-card">
+          <label for="reportStart">Tanggal Awal</label>
+          <input type="date" id="reportStart">
+
+          <label for="reportEnd">Tanggal Akhir</label>
+          <input type="date" id="reportEnd">
+
+          <button class="btn-primary" id="generateReportButton">
+            Buat Laporan
+          </button>
+        </div>
+
+        <div id="reportSummary" class="report-summary"></div>
+
+        <div id="reportList" class="data-list">
+          <div class="empty-state">Pilih rentang tanggal untuk membuat laporan.</div>
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- NAVIGASI BAWAH -->
+    <nav class="bottom-nav">
+
+      <button class="nav-item active" data-page="dashboard">
+        <span>⌂</span>
+        <small>Home</small>
+      </button>
+
+      <button class="nav-item" data-page="scan">
+        <span>▣</span>
+        <small>Scan</small>
+      </button>
+
+      <button class="nav-item" data-page="students">
+        <span>♙</span>
+        <small>Siswa</small>
+      </button>
+
+      <button class="nav-item" data-page="attendance">
+        <span>▤</span>
+        <small>Absensi</small>
+      </button>
+
+      <button class="nav-item" data-page="reports">
+        <span>▥</span>
+        <small>Laporan</small>
+      </button>
+
+    </nav>
+
+  </section>
+
+
+  <!-- MODAL FORM -->
+  <div id="formModal" class="modal hidden">
+    <div class="modal-card">
+
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">FROZEN SYSTEM</p>
+          <h2 id="modalTitle">Form Data</h2>
+        </div>
+
+        <button type="button" class="modal-close" id="closeModalButton">
+          ×
+        </button>
+      </div>
+
+      <form id="dynamicForm">
+        <div id="modalFields"></div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="cancelModalButton">
+            Batal
+          </button>
+
+          <button type="submit" class="btn-primary" id="saveModalButton">
+            Simpan Data
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- NOTIFIKASI -->
+  <div id="toast" class="toast"></div>
+
+
+  <!-- JAVASCRIPT -->
+  <script src="javascript.js"></script>
+
+</body>
+</html>
