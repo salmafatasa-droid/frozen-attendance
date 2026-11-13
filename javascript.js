@@ -14,7 +14,7 @@
 
 const CONFIG = {
   // URL ini akan diisi setelah Google Apps Script di-deploy.
-  API_URL: "",
+  API_URL: "https://script.google.com/macros/s/AKfycbwimnApY_jUOCatW_qhG-E1pCd1onf93mMhD2My-IZgG5Qwvf_DBSJvFt3dAOdvLkRH/exec",
 
   // Nama file scanner yang akan dibuat berikutnya.
   SCANNER_URL: "scanner.html",
